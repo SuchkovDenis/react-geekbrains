@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -8,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import ImageIcon from '@material-ui/icons/Image';
 import WorkIcon from '@material-ui/icons/Work';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
+import {AddChatForm} from './../AddChatForm';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,35 +19,24 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const ChatList = () => {
+export const ChatList = (props) => {
     const classes = useStyles();
 
     return (
         <List className={classes.root}>
-            <ListItem>
-                <ListItemAvatar>
-                    <Avatar>
-                        <ImageIcon />
-                    </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Саша" secondary="Май 9, 2021" />
-            </ListItem>
-            <ListItem>
-                <ListItemAvatar>
-                    <Avatar>
-                        <WorkIcon />
-                    </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Маша" secondary="Март 7, 2021" />
-            </ListItem>
-            <ListItem>
-                <ListItemAvatar>
-                    <Avatar>
-                        <BeachAccessIcon />
-                    </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary="Матвей" secondary="Январь 30, 2021" />
-            </ListItem>
+            {Object.keys(props.chats).map((key) => 
+                <Link to={`/chat/${key}/`}>
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <ImageIcon />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={props.chats[key]} secondary="Чат" />
+                    </ListItem>
+                </Link>
+            )}
+            <AddChatForm handleAddChat = {props.handleAddChat}/>
         </List>
     );
 }
