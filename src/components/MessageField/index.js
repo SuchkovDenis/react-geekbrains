@@ -2,26 +2,34 @@ import React, {useEffect} from "react";
 import {MessageComponent} from "../Message";
 import {AUTHORS} from "../../utils/consts";
 import {MessageForm} from "../MessageForm";
+import {useDispatch, useSelector} from "react-redux";
+import {addMessage} from "../../store/chats/actions";
 
-export const MessageField = (props) => {
+export const MessageField = ({chatId}) => {
 
-    const messageList = Object.values(props.messages);
+    const dispatch = useDispatch();
+    const messages = useSelector((state) => state.chats.messages);
+    const chatMessages = useSelector((state) => state.chats.chatMessages);
+    const relatedMessages = Object.values(
+            Object.keys(messages)
+            .filter(key => (chatMessages[chatId] || []).includes(key))
+            .reduce((obj, key) => {return {...obj, [key]: messages[key]}}, {}));
 
     const handleAddMessage = (message) => {
-        props.handleAddMessage(message, props.chatId);
+        dispatch(addMessage(message, chatId));
     }
 
     useEffect(() => {
-        if (messageList.length > 0 && messageList[messageList.length - 1].author === AUTHORS.YOU) {
-            handleAddMessage({text: 'Привет из чата ' + props.chatId, author: AUTHORS.ROBOT});
+        if (relatedMessages.length > 0 && relatedMessages[relatedMessages.length - 1].author === AUTHORS.YOU) {
+            handleAddMessage({text: 'Привет из чата ' + chatId, author: AUTHORS.ROBOT});
         }
     });
 
     return (
         <>
-        { props.chatId >= 0 &&
+        { chatId >= 0 &&
             <div>
-                {messageList.map(message => <MessageComponent props={message}/>)}
+                {relatedMessages.map(message => <MessageComponent props={message}/>)}
                 <MessageForm onSubmit = {handleAddMessage}/>
             </div>
         }

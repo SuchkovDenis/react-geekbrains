@@ -1,36 +1,33 @@
-import React from "react";
-import {AUTHORS} from "../../utils/consts";
+import React, {useState} from "react";
 import {Fab, TextField} from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
+import {useDispatch} from "react-redux";
+import {addChat} from "../../store/chats/actions";
 
 
-export class AddChatForm extends React.Component {
+export const AddChatForm = () => {
 
-    constructor(props) {
-        super(props);
-        this.state = {value: ''};
+    const [value, setValue] = useState( '');
+    const dispatch = useDispatch();
+
+    const handleChange = (event) => {
+        setValue(event.target.value);
     }
 
-    handleChange = (event) => {
-        this.setState({value: event.target.value});
-    }
-
-    handleSubmit = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
-        if (this.state.value) {
-            this.props.handleAddChat(this.state.value);
-            this.setState({value: ''})
+        if (value) {
+            dispatch(addChat(value));
+            setValue('');
         }
     }
 
-    render() {
-        return (
-            <form onSubmit={this.handleSubmit}>
-                <TextField value={this.state.value} onChange={this.handleChange} autoFocus floatingLabelText="Новый чат" />
-                <Fab type="submit" mini>
-                    <AddIcon/>
-                </Fab>
-            </form>
-        );
-    }
+    return (
+        <form onSubmit={handleSubmit}>
+            <TextField value={value} onChange={handleChange} autoFocus floatingLabelText="Новый чат" />
+            <Fab type="submit" mini>
+                <AddIcon/>
+            </Fab>
+        </form>
+    );
 }

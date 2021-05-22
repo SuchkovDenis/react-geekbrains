@@ -7,9 +7,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import ImageIcon from '@material-ui/icons/Image';
-import WorkIcon from '@material-ui/icons/Work';
-import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import {AddChatForm} from './../AddChatForm';
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,12 +18,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export const ChatList = (props) => {
+export const ChatList = () => {
     const classes = useStyles();
+    const chatList = useSelector((state) => state.chats.chats);
 
     return (
         <List className={classes.root}>
-            {Object.keys(props.chats).map((key) => 
+            {Object.keys(chatList).map((key) =>
                 <Link to={`/chat/${key}/`}>
                     <ListItem>
                         <ListItemAvatar>
@@ -32,11 +32,11 @@ export const ChatList = (props) => {
                                 <ImageIcon />
                             </Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary={props.chats[key]} secondary="Чат" />
+                        <ListItemText primary={chatList[key]} secondary="Чат" />
                     </ListItem>
                 </Link>
             )}
-            <AddChatForm handleAddChat = {props.handleAddChat}/>
+            <AddChatForm/>
         </List>
     );
 }
