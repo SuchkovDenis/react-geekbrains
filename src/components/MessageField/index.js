@@ -1,11 +1,13 @@
-import React, {useEffect} from "react";
+import React, {useCallback} from "react";
 import {MessageComponent} from "../Message";
-import {AUTHORS} from "../../utils/consts";
 import {MessageForm} from "../MessageForm";
 import {useDispatch, useSelector} from "react-redux";
-import {addMessage} from "../../store/chats/actions";
+import {addMessageWithThunk} from "../../store/chats/actions";
+import {useParams} from "react-router-dom";
 
-export const MessageField = ({chatId}) => {
+export const MessageField = () => {
+
+    const { chatId } = useParams();
 
     const dispatch = useDispatch();
     const messages = useSelector((state) => state.chats.messages);
@@ -15,15 +17,12 @@ export const MessageField = ({chatId}) => {
             .filter(key => (chatMessages[chatId] || []).includes(key))
             .reduce((obj, key) => {return {...obj, [key]: messages[key]}}, {}));
 
-    const handleAddMessage = (message) => {
-        dispatch(addMessage(message, chatId));
-    }
-
-    useEffect(() => {
-        if (relatedMessages.length > 0 && relatedMessages[relatedMessages.length - 1].author === AUTHORS.YOU) {
-            handleAddMessage({text: 'Привет из чата ' + chatId, author: AUTHORS.ROBOT});
-        }
-    });
+    const handleAddMessage = useCallback(
+        (newMessage) => {
+            dispatch(addMessageWithThunk(newMessage, chatId));
+        },
+        [chatId, dispatch]
+    );
 
     return (
         <>
