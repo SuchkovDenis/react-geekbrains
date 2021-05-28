@@ -4,6 +4,7 @@ import {chatsReducer} from "./chats/reducer";
 import {profileReducer} from "./profile/reducer";
 import storage from 'redux-persist/lib/storage';
 import {persistReducer, persistStore} from "redux-persist";
+import {weatherReducer} from "./weather/reducer";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -17,6 +18,7 @@ const persistedReducer = persistReducer(
     combineReducers({
         chats: chatsReducer,
         profile: profileReducer,
+        weather: weatherReducer,
     })
 );
 
