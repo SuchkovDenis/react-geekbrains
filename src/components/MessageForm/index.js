@@ -1,36 +1,31 @@
-import React from "react";
+import React, {useState} from "react";
 import {AUTHORS} from "../../utils/consts";
 import {Fab, TextField} from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 
 
-export class MessageForm extends React.Component {
+export const MessageForm = (props) => {
 
-    constructor(props) {
-        super(props);
-        this.state = {value: ''};
+    const [value, setValue] = useState('');
+
+    const handleChange = (event) => {
+        setValue(event.target.value);
     }
 
-    handleChange = (event) => {
-        this.setState({value: event.target.value});
-    }
-
-    handleSubmit = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
-        if (this.state.value) {
-            this.props.onSubmit({text: this.state.value, author: AUTHORS.YOU});
-            this.setState({value: ''})
+        if (value) {
+            props.onSubmit({text: value, author: AUTHORS.YOU});
+            setValue('')
         }
     }
 
-    render() {
-        return (
-            <form onSubmit={this.handleSubmit}>
-                <TextField value={this.state.value} onChange={this.handleChange} autoFocus floatingLabelText="Введите сообщение" />
-                <Fab type="submit" mini={true}>
-                    <SendIcon/>
-                </Fab>
-            </form>
-        );
-    }
+    return (
+        <form onSubmit={handleSubmit}>
+            <TextField value={value} onChange={handleChange} autoFocus floatingLabelText="Введите сообщение" />
+            <Fab type="submit" mini={true}>
+                <SendIcon/>
+            </Fab>
+        </form>
+    );
 }
