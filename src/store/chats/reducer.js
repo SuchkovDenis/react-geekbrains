@@ -1,4 +1,4 @@
-import {ADD_CHAT, ADD_MESSAGE} from "./actions";
+import {ADD_CHAT, ADD_MESSAGE, DELETE_CHAT} from "./actions";
 import {AUTHORS} from "../../utils/consts";
 
 const initialState = {
@@ -20,7 +20,7 @@ const initialState = {
 };
 
 const createIdx = (obj) => {
-    return '' + (Object.values(obj).length + 1);
+    return '' + (Math.max(0, ...(Object.keys(obj).map(k => Number(k)))) + 1);
 }
 
 export const chatsReducer = (state = initialState, action) => {
@@ -36,6 +36,19 @@ export const chatsReducer = (state = initialState, action) => {
                 chatMessages: {
                     ...state.chatMessages,
                     ...{[chatIdx]: []},
+                }
+            };
+        }
+        case DELETE_CHAT: {
+            const {[action.chatIdx]: omitChat, ...chats} = state.chats;
+            const {[action.chatIdx]: omitChatMessages, ...chatMessages} = state.chatMessages;
+            return {
+                ...state,
+                chats: {
+                    ...chats
+                },
+                chatMessages: {
+                    ...chatMessages
                 }
             };
         }
