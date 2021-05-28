@@ -3,7 +3,7 @@ import {ChatList} from "../ChatList";
 import {Card, CardContent, Grid, Paper} from '@material-ui/core';
 import {MessageField} from "../MessageField";
 
-export const Chat = (props) => {
+export const Chat = () => {
     return (
         <div>
             <Grid container spacing={2}>
@@ -15,7 +15,7 @@ export const Chat = (props) => {
                 <Grid item xs={8}>
                     <Card>
                         <CardContent>
-                            <MessageField chatId = {props.chatId}/>
+                            <MessageField/>
                         </CardContent>
                     </Card>
                 </Grid>
